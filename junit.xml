@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <testsuite name="ClusterLoaderV2" tests="0" failures="0" errors="0" time="62.13">
-      <testcase name="network_performance overall (clusterloader2/testing/network/config.yaml)" classname="ClusterLoaderV2" time="62.129012"></testcase>
-      <testcase name="network_performance: [step: 01] Start network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="12.096616417"></testcase>
-      <testcase name="network_performance: [step: 02] Gather network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="40.005138958"></testcase>
+  <testsuite name="ClusterLoaderV2" tests="0" failures="2" errors="0" time="72.146">
+      <testcase name="network_performance overall (clusterloader2/testing/network/config.yaml)" classname="ClusterLoaderV2" time="72.144828166">
+          <failure type="Failure">:0&#xA;[measurement call NetworkPerformanceMetrics - NetworkPerformanceMetrics error: criticl error: failed to receive response from 1 pods]&#xA;:0</failure>
+      </testcase>
+      <testcase name="network_performance: [step: 01] Start network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="12.106558083"></testcase>
+      <testcase name="network_performance: [step: 02] Gather network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="50.003503209">
+          <failure type="Failure">:0&#xA;[measurement call NetworkPerformanceMetrics - NetworkPerformanceMetrics error: criticl error: failed to receive response from 1 pods]&#xA;:0</failure>
+      </testcase>
   </testsuite>
