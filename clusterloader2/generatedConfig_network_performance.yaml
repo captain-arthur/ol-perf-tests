@@ -1,0 +1,41 @@
+name: network_performance
+dependencies: []
+automanagednamespaces: 0
+namespace:
+  number: 1
+  prefix: test-227y5q
+  deletestalenamespaces: false
+  deleteautomanagednamespaces: true
+  enableexistingnamespaces: false
+  deletenamespacetimeout: 600000000000
+steps:
+- phases: []
+  measurements:
+  - method: NetworkPerformanceMetrics
+    params:
+      action: start
+      duration: 10s
+      numberOfClients: 50
+      numberOfServers: 50
+      protocol: HTTP
+    identifier: NetworkPerformanceMetrics
+    instances: []
+  module:
+    path: ""
+    params: {}
+  name: Start network performance measurement
+- phases: []
+  measurements:
+  - method: NetworkPerformanceMetrics
+    params:
+      action: gather
+    identifier: NetworkPerformanceMetrics
+    instances: []
+  module:
+    path: ""
+    params: {}
+  name: Gather network performance measurement
+tuningsets: []
+chaosmonkey:
+  nodefailure: null
+  excludednodes: {}

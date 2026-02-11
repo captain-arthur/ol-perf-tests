@@ -21,10 +21,11 @@ spec:
         name: worker
         imagePullPolicy: IfNotPresent
         args:
-          - --log_file=/var/log/cl2-netperf-worker.log
+          - --log_file=/var/log/$(POD_NAME).log
           - --logtostderr=false
           - --v=4
           - --udpClientExtraArguments=-b 750M
+          - --httpClientExtraArguments=-c10 -d0
         resources:
           limits:
             cpu: "500m"
@@ -40,6 +41,5 @@ spec:
               mountPath: /var/log
       volumes:
         - name: logs-volume
-          hostPath:
-            path: /var/log
+          emptyDir: {}
 

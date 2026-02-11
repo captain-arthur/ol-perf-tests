@@ -85,7 +85,7 @@ func (npm *networkPerformanceMeasurement) populateTemplate(podPair podPair, inde
 		"protocol":             npm.protocol,
 		"duration":             npm.testDuration.Seconds(),
 		"clientStartTimestamp": npm.startTimeStampForTestExecution,
-		"numberOfClients":      1,
+		"numberOfClients":      50,
 	}
 }
 

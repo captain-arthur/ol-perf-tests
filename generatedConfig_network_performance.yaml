@@ -3,7 +3,7 @@ dependencies: []
 automanagednamespaces: 0
 namespace:
   number: 1
-  prefix: test-1f6e5y
+  prefix: test-o67my5
   deletestalenamespaces: false
   deleteautomanagednamespaces: true
   enableexistingnamespaces: false
@@ -17,7 +17,7 @@ steps:
       duration: 10s
       numberOfClients: 1
       numberOfServers: 1
-      protocol: TCP
+      protocol: HTTP
     identifier: NetworkPerformanceMetrics
     instances: []
   module:

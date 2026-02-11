@@ -169,7 +169,7 @@ func (npm *networkPerformanceMeasurement) start(config *measurement.Config) erro
 	}
 
 	switch npm.podRatioType {
-	case oneToOne, manyToMany:
+	case oneToOne, manyToMany, manyToOne:
 		npm.execNToMTest()
 	default:
 		return fmt.Errorf("invalid Pod Ratio: %v", npm.podRatioType)
@@ -288,7 +288,7 @@ func (npm *networkPerformanceMeasurement) gather() (measurement.Summary, error) 
 	}
 
 	close(npm.stopCh)
-	npm.cleanupCluster()
+	// npm.cleanupCluster()
 
 	resultSummary := npm.createResultSummary()
 	content, err := util.PrettyPrintJSON(&measurementutil.PerfData{
@@ -305,7 +305,7 @@ func (npm *networkPerformanceMeasurement) gather() (measurement.Summary, error) 
 // Dispose disposes resources,objects after the measurement.
 func (npm *networkPerformanceMeasurement) Dispose() {
 	klog.Infof("Stopping network performance measurement...")
-	npm.cleanupCluster()
+	// npm.cleanupCluster()
 }
 
 func (npm *networkPerformanceMeasurement) handleUpdateNetworkTestEvents(newObj interface{}) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <testsuite name="ClusterLoaderV2" tests="0" failures="0" errors="0" time="79.291">
-      <testcase name="network_performance overall (clusterloader2/testing/network/config.yaml)" classname="ClusterLoaderV2" time="79.288610833"></testcase>
-      <testcase name="network_performance: [step: 01] Start network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="14.181761416"></testcase>
-      <testcase name="network_performance: [step: 02] Gather network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="55.045115209"></testcase>
+  <testsuite name="ClusterLoaderV2" tests="0" failures="0" errors="0" time="62.13">
+      <testcase name="network_performance overall (clusterloader2/testing/network/config.yaml)" classname="ClusterLoaderV2" time="62.129012"></testcase>
+      <testcase name="network_performance: [step: 01] Start network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="12.096616417"></testcase>
+      <testcase name="network_performance: [step: 02] Gather network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="40.005138958"></testcase>
   </testsuite>
