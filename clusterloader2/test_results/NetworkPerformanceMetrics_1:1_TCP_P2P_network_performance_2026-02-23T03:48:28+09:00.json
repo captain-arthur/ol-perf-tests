@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "dataItems": [
+    {
+      "data": {
+        "Value": 5161126
+      },
+      "unit": "kbytes/sec",
+      "labels": {
+        "Metric": "Throughput"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuite name="ClusterLoaderV2" tests="0" failures="0" errors="0" time="53.255">
+      <testcase name="network_performance overall (testing/network/config.yaml)" classname="ClusterLoaderV2" time="53.253879875"></testcase>
+      <testcase name="network_performance: [step: 01] Start network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="2.17736275"></testcase>
+      <testcase name="network_performance: [step: 02] Gather network performance measurement [00] - NetworkPerformanceMetrics" classname="ClusterLoaderV2" time="41.034293459"></testcase>
+  </testsuite>

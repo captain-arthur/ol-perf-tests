@@ -16,6 +16,7 @@ spec:
         group: network
         name: worker
     spec:
+      serviceAccountName: default
       containers:
       - image: gcr.io/k8s-testimages/netperfbenchmark:0.3
         name: worker
@@ -27,9 +28,11 @@ spec:
           - --udpClientExtraArguments=-b 750M
         resources:
           limits:
-            cpu: "500m"
+            cpu: "2000m"
+            memory: "1Gi"
           requests:
-            cpu: "500m"
+            cpu: "2000m"
+            memory: "1Gi"
         env:
         - name: POD_NAME
           valueFrom:
