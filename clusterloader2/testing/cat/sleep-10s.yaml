@@ -1,0 +1,11 @@
+# CAT: Sleep 10s.
+name: cat-sleep-10s
+namespace:
+  number: 1
+steps:
+- name: Sleep 10s
+  measurements:
+  - Identifier: Sleep10s
+    Method: Sleep
+    Params:
+      duration: 10s

@@ -1,0 +1,26 @@
+# CAT: Create 3 ConfigMaps then sleep 1s.
+name: cat-create-three-configmaps
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Create 3 ConfigMaps
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 3
+    tuningSet: default
+    objectBundle:
+    - basename: cat-cm-three
+      objectTemplatePath: configmap.yaml
+- name: Sleep 1s
+  measurements:
+  - Identifier: Sleep1s
+    Method: Sleep
+    Params:
+      duration: 1s

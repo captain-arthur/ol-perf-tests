@@ -1,0 +1,13 @@
+# CAT: WaitForNodes (2..4 ready nodes).
+name: cat-wait-for-nodes-2-4
+namespace:
+  number: 1
+steps:
+- name: Wait for nodes ready
+  measurements:
+  - Identifier: WaitCatNodes24
+    Method: WaitForNodes
+    Params:
+      minDesiredNodeCount: 2
+      maxDesiredNodeCount: 4
+      timeout: 2m

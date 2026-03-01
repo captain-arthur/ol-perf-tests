@@ -1,0 +1,23 @@
+# CAT: MetricsForE2E gather twice (two steps).
+name: cat-metrics-for-e2e-twice
+namespace:
+  number: 1
+steps:
+- name: Gather e2e metrics (first)
+  measurements:
+  - Identifier: CatMetricsE2E1
+    Method: MetricsForE2E
+    Params:
+      gatherKubeletsMetrics: false
+- name: Sleep 2s
+  measurements:
+  - Identifier: Sleep2s
+    Method: Sleep
+    Params:
+      duration: 2s
+- name: Gather e2e metrics (second)
+  measurements:
+  - Identifier: CatMetricsE2E2
+    Method: MetricsForE2E
+    Params:
+      gatherKubeletsMetrics: false

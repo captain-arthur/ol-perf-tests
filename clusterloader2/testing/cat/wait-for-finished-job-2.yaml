@@ -1,0 +1,34 @@
+# CAT: WaitForFinishedJobs with 2 Jobs.
+name: cat-wait-for-finished-job-2
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Start wait for finished jobs
+  measurements:
+  - Identifier: WaitCatJobs2
+    Method: WaitForFinishedJobs
+    Params:
+      action: start
+      labelSelector: group=cat-job-2
+- name: Create 2 Jobs
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 2
+    tuningSet: default
+    objectBundle:
+    - basename: cat-job-2
+      objectTemplatePath: job-2.yaml
+- name: Wait for jobs to finish
+  measurements:
+  - Identifier: WaitCatJobs2
+    Method: WaitForFinishedJobs
+    Params:
+      action: gather
+      timeout: 2m

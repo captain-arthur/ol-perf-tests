@@ -1,0 +1,76 @@
+# CAT prototype: SchedulingThroughput + PodStartupLatency with 1 pod.
+# SLO (CL2 내장 단언):
+#   - PodStartupLatency: perc50/90/99 <= 30s (threshold)
+#   - SchedulingThroughput: max >= 0.5 pods/s (threshold)
+name: cat-scheduling-throughput-minimal
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+- name: UniformQPS
+  qpsLoad:
+    qps: 1
+steps:
+- name: Start scheduler throughput measurements
+  measurements:
+  # SLO: pod_startup latency perc50/90/99 <= 30s (fail if exceeded)
+  - Identifier: CatSchedulerThroughputPodStartupLatency
+    Method: PodStartupLatency
+    Params:
+      action: start
+      labelSelector: group=cat-scheduling-throughput
+      threshold: 30s
+  - Identifier: CatSchedulingThroughput
+    Method: SchedulingThroughput
+    Params:
+      action: start
+      labelSelector: group=cat-scheduling-throughput
+      measurmentInterval: 1s
+- name: Create 1 pod
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: UniformQPS
+    objectBundle:
+    - basename: cat-scheduling-throughput-pod
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-scheduling-throughput
+- name: Wait for pod running
+  measurements:
+  - Identifier: WaitCatSchedPods
+    Method: WaitForRunningPods
+    Params:
+      action: gather
+      timeout: 2m
+      desiredPodCount: 1
+      labelSelector: group=cat-scheduling-throughput
+- name: Gather scheduler throughput measurements
+  measurements:
+  - Identifier: CatSchedulerThroughputPodStartupLatency
+    Method: PodStartupLatency
+    Params:
+      action: gather
+  # SLO: scheduling throughput max >= 0.5 pods/s (fail if below)
+  - Identifier: CatSchedulingThroughput
+    Method: SchedulingThroughput
+    Params:
+      action: gather
+      threshold: 0.5
+- name: Delete pod
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 0
+    tuningSet: default
+    objectBundle:
+    - basename: cat-scheduling-throughput-pod
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-scheduling-throughput

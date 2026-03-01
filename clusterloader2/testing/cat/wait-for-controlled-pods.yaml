@@ -1,0 +1,37 @@
+# CAT prototype: WaitForControlledPodsRunning (1 Deployment, 1 replica).
+# SLO: CL2 WaitForControlledPodsRunning has operationTimeout only, no latency SLO; assertion not supported. Use post-processing for SLO.
+name: cat-wait-for-controlled-pods
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Start wait measurement
+  measurements:
+  - Identifier: WaitCatDeployment
+    Method: WaitForControlledPodsRunning
+    Params:
+      action: start
+      apiVersion: apps/v1
+      kind: Deployment
+      labelSelector: group=cat-controlled
+      operationTimeout: 5m
+- name: Create 1 Deployment (1 replica)
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: default
+    objectBundle:
+    - basename: cat-deploy
+      objectTemplatePath: deployment.yaml
+- name: Wait for controlled pods running
+  measurements:
+  - Identifier: WaitCatDeployment
+    Method: WaitForControlledPodsRunning
+    Params:
+      action: gather

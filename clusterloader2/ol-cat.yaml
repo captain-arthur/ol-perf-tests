@@ -1,0 +1,63 @@
+# CAT (Cluster Acceptance Test) prototype suite — measurement별 시나리오 1개.
+# Run from clusterloader2/: ./run-e2e.sh --testsuite=ol-cat.yaml --provider=skeleton --kubeconfig=$HOME/.kube/config
+# For service-creation-latency add: --enable-exec-service
+#
+# 시나리오와 measurement 대응:
+#   Sleep → sleep
+#   Timer → timer
+#   Exec → exec-echo
+#   WaitForRunningPods → wait-for-running-pods
+#   WaitForControlledPodsRunning → wait-for-controlled-pods
+#   WaitForNodes → wait-for-nodes
+#   NetworkPerformanceMetrics → network-tcp-1-1
+#   PodStartupLatency + SchedulingThroughput → scheduling-throughput-minimal
+#   WaitForFinishedJobs → wait-for-finished-job
+#   JobLifecycleLatency → job-lifecycle-latency
+#   ServiceCreationLatency → service-creation-latency
+#   WaitForGenericK8sObjects → wait-for-generic-deployment
+#   APIAvailability → api-availability
+#   MetricsForE2E → metrics-for-e2e
+- identifier: sleep
+  configPath: testing/cat/sleep.yaml
+  overridePaths: []
+- identifier: timer
+  configPath: testing/cat/timer.yaml
+  overridePaths: []
+- identifier: exec-echo
+  configPath: testing/cat/exec-echo.yaml
+  overridePaths: []
+- identifier: wait-for-running-pods
+  configPath: testing/cat/wait-for-running-pods.yaml
+  overridePaths: []
+- identifier: wait-for-controlled-pods
+  configPath: testing/cat/wait-for-controlled-pods.yaml
+  overridePaths: []
+- identifier: wait-for-nodes
+  configPath: testing/cat/wait-for-nodes.yaml
+  overridePaths: []
+- identifier: network-tcp-1-1
+  configPath: testing/network/config.yaml
+  overridePaths:
+    - testing/network/tcp_protocol_override.yaml
+    - testing/network/1_1_ratio_override.yaml
+- identifier: scheduling-throughput-minimal
+  configPath: testing/cat/scheduling-throughput-minimal.yaml
+  overridePaths: []
+- identifier: wait-for-finished-job
+  configPath: testing/cat/wait-for-finished-job.yaml
+  overridePaths: []
+- identifier: job-lifecycle-latency
+  configPath: testing/cat/job-lifecycle-latency.yaml
+  overridePaths: []
+- identifier: service-creation-latency
+  configPath: testing/cat/service-creation-latency.yaml
+  overridePaths: []
+- identifier: wait-for-generic-deployment
+  configPath: testing/cat/wait-for-generic-deployment.yaml
+  overridePaths: []
+- identifier: api-availability
+  configPath: testing/cat/api-availability.yaml
+  overridePaths: []
+- identifier: metrics-for-e2e
+  configPath: testing/cat/metrics-for-e2e.yaml
+  overridePaths: []

@@ -1,0 +1,30 @@
+# CAT prototype: Timer measurement (start / stop / gather).
+# SLO: CL2 Timer measurement has no threshold parameter; assertion not supported. Use post-processing for SLO.
+name: cat-timer
+namespace:
+  number: 1
+steps:
+- name: Start timer
+  measurements:
+  - Identifier: CatTimer
+    Method: Timer
+    Params:
+      action: start
+      label: step1
+- name: Sleep 2s
+  measurements:
+  - Identifier: Sleep2s
+    Method: Sleep
+    Params:
+      duration: 2s
+- name: Stop timer and gather
+  measurements:
+  - Identifier: CatTimer
+    Method: Timer
+    Params:
+      action: stop
+      label: step1
+  - Identifier: CatTimer
+    Method: Timer
+    Params:
+      action: gather

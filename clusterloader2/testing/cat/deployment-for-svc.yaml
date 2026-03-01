@@ -1,0 +1,27 @@
+# Deployment for CAT ServiceCreationLatency. Must listen on Service port so pingChecker (curl) can succeed.
+# Use registry.k8s.io agnhost serve-hostname (port 9376) to avoid docker.io pull issues.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Name}}
+  labels:
+    group: cat-svc
+spec:
+  selector:
+    matchLabels:
+      group: cat-svc
+      name: {{.Name}}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        group: cat-svc
+        name: {{.Name}}
+    spec:
+      containers:
+      - name: server
+        image: registry.k8s.io/e2e-test-images/agnhost:2.45
+        args:
+        - serve-hostname
+        ports:
+        - containerPort: 9376

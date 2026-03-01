@@ -1,0 +1,27 @@
+# CAT: APIAvailability with 5s sleep (shorter than default).
+name: cat-api-availability-short
+namespace:
+  number: 1
+steps:
+- name: Start API availability measurement
+  measurements:
+  - Identifier: CatAPIAvailShort
+    Method: APIAvailability
+    Params:
+      action: start
+      pollFrequency: 5s
+      threshold: 0.99
+      useHostInternalIPs: false
+      useHostPublicIPs: false
+- name: Sleep 5s
+  measurements:
+  - Identifier: Sleep5s
+    Method: Sleep
+    Params:
+      duration: 5s
+- name: Gather API availability
+  measurements:
+  - Identifier: CatAPIAvailShort
+    Method: APIAvailability
+    Params:
+      action: gather

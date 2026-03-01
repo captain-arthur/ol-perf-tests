@@ -1,0 +1,15 @@
+# ClusterIP Service for CAT ServiceCreationLatency (selector matches deployment pods).
+# Port 9376 matches agnhost serve-hostname.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Name}}
+  labels:
+    group: cat-svc
+spec:
+  type: ClusterIP
+  selector:
+    group: cat-svc
+  ports:
+  - port: 9376
+    targetPort: 9376

@@ -1,0 +1,35 @@
+# CAT: WaitForFinishedJobs (create 1 minimal Job, wait until finished).
+# SLO: CL2 WaitForFinishedJobs has timeout only; assertion not supported. Use post-processing for SLO.
+name: cat-wait-for-finished-job
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Start wait for finished jobs
+  measurements:
+  - Identifier: WaitCatJobs
+    Method: WaitForFinishedJobs
+    Params:
+      action: start
+      labelSelector: group=cat-job
+- name: Create 1 Job
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: default
+    objectBundle:
+    - basename: cat-job
+      objectTemplatePath: job.yaml
+- name: Wait for job to finish
+  measurements:
+  - Identifier: WaitCatJobs
+    Method: WaitForFinishedJobs
+    Params:
+      action: gather
+      timeout: 2m

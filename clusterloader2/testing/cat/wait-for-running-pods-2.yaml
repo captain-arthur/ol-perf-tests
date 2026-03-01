@@ -1,0 +1,29 @@
+# CAT: WaitForRunningPods with 2 pods.
+name: cat-wait-for-running-pods-2
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Create 2 pods
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 2
+    tuningSet: default
+    objectBundle:
+    - basename: cat-pod-2
+      objectTemplatePath: pod.yaml
+- name: Wait for 2 pods running
+  measurements:
+  - Identifier: WaitCatPods2
+    Method: WaitForRunningPods
+    Params:
+      action: gather
+      timeout: 2m
+      desiredPodCount: 2
+      labelSelector: group=cat-wait-pods

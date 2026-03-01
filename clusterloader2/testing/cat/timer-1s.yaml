@@ -1,0 +1,29 @@
+# CAT: Timer with 1s between start/stop.
+name: cat-timer-1s
+namespace:
+  number: 1
+steps:
+- name: Start timer
+  measurements:
+  - Identifier: CatTimer1s
+    Method: Timer
+    Params:
+      action: start
+      label: step1
+- name: Sleep 1s
+  measurements:
+  - Identifier: Sleep1s
+    Method: Sleep
+    Params:
+      duration: 1s
+- name: Stop timer and gather
+  measurements:
+  - Identifier: CatTimer1s
+    Method: Timer
+    Params:
+      action: stop
+      label: step1
+  - Identifier: CatTimer1s
+    Method: Timer
+    Params:
+      action: gather

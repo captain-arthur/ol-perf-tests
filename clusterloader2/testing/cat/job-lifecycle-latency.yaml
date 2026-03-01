@@ -1,0 +1,35 @@
+# CAT: JobLifecycleLatency (create 1 Job, measure lifecycle latency).
+# SLO: CL2 JobLifecycleLatency has no threshold; assertion not supported. Use post-processing for SLO.
+name: cat-job-lifecycle-latency
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Start job lifecycle latency measurement
+  measurements:
+  - Identifier: CatJobLifecycle
+    Method: JobLifecycleLatency
+    Params:
+      action: start
+      labelSelector: group=cat-job
+- name: Create 1 Job
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: default
+    objectBundle:
+    - basename: cat-job-lifecycle
+      objectTemplatePath: job.yaml
+- name: Gather job lifecycle latency
+  measurements:
+  - Identifier: CatJobLifecycle
+    Method: JobLifecycleLatency
+    Params:
+      action: gather
+      timeout: 2m

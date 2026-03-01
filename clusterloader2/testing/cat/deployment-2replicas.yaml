@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Name}}
+  labels:
+    group: cat-controlled-2
+spec:
+  selector:
+    matchLabels:
+      group: cat-controlled-2
+      name: {{.Name}}
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        group: cat-controlled-2
+        name: {{.Name}}
+    spec:
+      containers:
+      - name: pause
+        image: registry.k8s.io/pause:3.9

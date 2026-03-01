@@ -1,0 +1,71 @@
+# CAT: SchedulingThroughput + PodStartupLatency with 2 pods.
+name: cat-scheduling-throughput-2pods
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+- name: UniformQPS
+  qpsLoad:
+    qps: 1
+steps:
+- name: Start scheduler throughput measurements
+  measurements:
+  - Identifier: CatSched2PodStartup
+    Method: PodStartupLatency
+    Params:
+      action: start
+      labelSelector: group=cat-sched-2
+      threshold: 30s
+  - Identifier: CatSchedThroughput2
+    Method: SchedulingThroughput
+    Params:
+      action: start
+      labelSelector: group=cat-sched-2
+      measurmentInterval: 1s
+- name: Create 2 pods
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 2
+    tuningSet: UniformQPS
+    objectBundle:
+    - basename: cat-sched-2-pod
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-sched-2
+- name: Wait for pods running
+  measurements:
+  - Identifier: WaitCatSched2
+    Method: WaitForRunningPods
+    Params:
+      action: gather
+      timeout: 2m
+      desiredPodCount: 2
+      labelSelector: group=cat-sched-2
+- name: Gather scheduler throughput measurements
+  measurements:
+  - Identifier: CatSched2PodStartup
+    Method: PodStartupLatency
+    Params:
+      action: gather
+  - Identifier: CatSchedThroughput2
+    Method: SchedulingThroughput
+    Params:
+      action: gather
+      threshold: 0.5
+- name: Delete pods
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 0
+    tuningSet: default
+    objectBundle:
+    - basename: cat-sched-2-pod
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-sched-2

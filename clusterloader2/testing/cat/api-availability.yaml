@@ -1,0 +1,29 @@
+# CAT: APIAvailability (poll API /readyz, gather availability).
+# SLO: CL2 APIAvailability supports threshold at gather; can be used for SLO. Minimal run: no host poll.
+# useHostInternalIPs: false to avoid exec/host requirement in minimal cluster.
+name: cat-api-availability
+namespace:
+  number: 1
+steps:
+- name: Start API availability measurement
+  measurements:
+  - Identifier: CatAPIAvailability
+    Method: APIAvailability
+    Params:
+      action: start
+      pollFrequency: 5s
+      threshold: 0.99
+      useHostInternalIPs: false
+      useHostPublicIPs: false
+- name: Sleep 10s
+  measurements:
+  - Identifier: SleepBeforeGather
+    Method: Sleep
+    Params:
+      duration: 10s
+- name: Gather API availability
+  measurements:
+  - Identifier: CatAPIAvailability
+    Method: APIAvailability
+    Params:
+      action: gather

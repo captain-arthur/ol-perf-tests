@@ -1,0 +1,12 @@
+# CAT: Exec measurement (run local command; no exec-service required).
+name: cat-exec-echo
+namespace:
+  number: 1
+steps:
+- name: Exec echo
+  measurements:
+  - Identifier: CatExecEcho
+    Method: Exec
+    Params:
+      command: ["sh", "-c", "echo ok"]
+      timeout: 10s

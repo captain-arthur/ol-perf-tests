@@ -1,0 +1,14 @@
+# CAT: WaitForNodes (wait until cluster has 1..4 ready nodes).
+# SLO: CL2 WaitForNodes has no threshold; assertion not supported. Use post-processing for SLO.
+name: cat-wait-for-nodes
+namespace:
+  number: 1
+steps:
+- name: Wait for nodes ready
+  measurements:
+  - Identifier: WaitCatNodes
+    Method: WaitForNodes
+    Params:
+      minDesiredNodeCount: 1
+      maxDesiredNodeCount: 4
+      timeout: 2m

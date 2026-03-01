@@ -1,0 +1,12 @@
+# CAT prototype: Sleep measurement only (minimal).
+# SLO: CL2 Sleep measurement has no threshold parameter; assertion not supported. Use post-processing for SLO.
+name: cat-sleep
+namespace:
+  number: 1
+steps:
+- name: Sleep 5s
+  measurements:
+  - Identifier: Sleep5s
+    Method: Sleep
+    Params:
+      duration: 5s

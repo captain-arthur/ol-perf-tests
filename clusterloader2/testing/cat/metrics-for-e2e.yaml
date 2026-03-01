@@ -1,0 +1,12 @@
+# CAT: MetricsForE2E (gather apiserver/scheduler/controller-manager metrics once).
+# SLO: CL2 MetricsForE2E has no threshold; assertion not supported. Use post-processing for SLO.
+name: cat-metrics-for-e2e
+namespace:
+  number: 1
+steps:
+- name: Gather e2e metrics
+  measurements:
+  - Identifier: CatMetricsForE2E
+    Method: MetricsForE2E
+    Params:
+      gatherKubeletsMetrics: false

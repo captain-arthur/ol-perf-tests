@@ -1,0 +1,20 @@
+# Minimal Job for CAT (label group=cat-job-2 for multi-job scenarios).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{.Name}}
+  labels:
+    group: cat-job-2
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      labels:
+        group: cat-job-2
+    spec:
+      containers:
+      - name: sleep
+        image: registry.k8s.io/e2e-test-images/busybox:1.29-1
+        command: ["sleep", "5"]
+      restartPolicy: Never

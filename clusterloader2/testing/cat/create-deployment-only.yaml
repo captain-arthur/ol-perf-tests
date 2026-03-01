@@ -1,0 +1,26 @@
+# CAT: Create 1 Deployment then sleep 1s (no wait for pods).
+name: cat-create-deployment-only
+namespace:
+  number: 1
+tuningSets:
+- name: default
+  globalQPSLoad:
+    qps: 1
+    burst: 2
+steps:
+- name: Create 1 Deployment
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: default
+    objectBundle:
+    - basename: cat-dep-only
+      objectTemplatePath: deployment.yaml
+- name: Sleep 1s
+  measurements:
+  - Identifier: Sleep1s
+    Method: Sleep
+    Params:
+      duration: 1s

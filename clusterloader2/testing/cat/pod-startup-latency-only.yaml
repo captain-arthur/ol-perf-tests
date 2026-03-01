@@ -1,0 +1,56 @@
+# CAT: PodStartupLatency only (1 pod, no SchedulingThroughput threshold).
+name: cat-pod-startup-latency-only
+namespace:
+  number: 1
+tuningSets:
+- name: UniformQPS
+  qpsLoad:
+    qps: 1
+steps:
+- name: Start pod startup latency
+  measurements:
+  - Identifier: CatPodStartupOnly
+    Method: PodStartupLatency
+    Params:
+      action: start
+      labelSelector: group=cat-pod-startup-only
+      threshold: 60s
+- name: Create 1 pod
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 1
+    tuningSet: UniformQPS
+    objectBundle:
+    - basename: cat-pod-startup-only
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-pod-startup-only
+- name: Wait for pod running
+  measurements:
+  - Identifier: WaitCatPodStartup
+    Method: WaitForRunningPods
+    Params:
+      action: gather
+      timeout: 2m
+      desiredPodCount: 1
+      labelSelector: group=cat-pod-startup-only
+- name: Gather pod startup latency
+  measurements:
+  - Identifier: CatPodStartupOnly
+    Method: PodStartupLatency
+    Params:
+      action: gather
+- name: Delete pod
+  phases:
+  - namespaceRange:
+      min: 1
+      max: 1
+    replicasPerNamespace: 0
+    tuningSet: UniformQPS
+    objectBundle:
+    - basename: cat-pod-startup-only
+      objectTemplatePath: pod-default.yaml
+      templateFillMap:
+        Group: cat-pod-startup-only
