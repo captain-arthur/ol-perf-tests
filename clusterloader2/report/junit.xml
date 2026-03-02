@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuite name="ClusterLoaderV2" tests="0" failures="0" errors="0" time="73.244">
+      <testcase name="pollWindow-readyz-availabilityAbove99 overall (testing/proto/proto-01-api-availability-slo.yaml)" classname="ClusterLoaderV2" time="20.064300833"></testcase>
+      <testcase name="pollWindow-readyz-availabilityAbove99: [step: 01] Start API availability measurement [00] - ProtoAPIAvailability" classname="ClusterLoaderV2" time="0.010711958"></testcase>
+      <testcase name="pollWindow-readyz-availabilityAbove99: [step: 02] Sleep 10s [00] - SleepBeforeGather" classname="ClusterLoaderV2" time="10.002169125"></testcase>
+      <testcase name="pollWindow-readyz-availabilityAbove99: [step: 03] Gather API availability [00] - ProtoAPIAvailability" classname="ClusterLoaderV2" time="0.006580416"></testcase>
+      <testcase name="podsReady-podToPodTcp-throughputRecorded overall (testing/proto/proto-02-network-performance.yaml)" classname="ClusterLoaderV2" time="53.169003375"></testcase>
+      <testcase name="podsReady-podToPodTcp-throughputRecorded: [step: 01] Start network performance measurement [00] - ProtoNetworkPerf" classname="ClusterLoaderV2" time="2.088547709"></testcase>
+      <testcase name="podsReady-podToPodTcp-throughputRecorded: [step: 02] Gather network performance [00] - ProtoNetworkPerf" classname="ClusterLoaderV2" time="41.044849917"></testcase>
+  </testsuite>

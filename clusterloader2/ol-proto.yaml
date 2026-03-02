@@ -1,0 +1,22 @@
+# ol-proto: CAT 기본 2종 시나리오 (단언 가능 1 + 단언 불가 1)
+# 실행: clusterloader2/ 에서
+#   ./clusterloader --testsuite=ol-proto.yaml --provider=skeleton --kubeconfig=$KUBECONFIG
+# 결과 수치(가용률, throughput/latency JSON)를 터미널에 보려면: -v=2
+# 결과를 파일로 받으려면: --report-dir=./report
+#
+# 네이밍: 조건_대상_예상결과 (언더바는 3구간 구분만, 구간 내부는 카멜케이스)
+#
+# 1) pollWindow_readyz_availabilityAbove99
+#    조건: 폴링 구간(일정 시간 동안 주기 호출하는 구간). 대상: API 서버 /readyz. 예상: 가용률이 99% 이상.
+#    (cluster가 떠 있는 건 전제이지 조건이 아님. 조건은 "그 구간 동안"이다.)
+#
+# 2) podsReady_podToPodTcp_throughputRecorded
+#    조건: 클라이언트·서버 파드가 기동된 상태. 대상: 파드→파드 TCP 트래픽. 예상: 처리량 수치가 기록됨(단언 없음).
+#
+# CL2 규칙: scenario identifier에는 언더바 불가(artifact 파일명 구분자로 사용). 하이픈 사용.
+- identifier: pollWindow-readyz-availabilityAbove99
+  configPath: testing/proto/proto-01-api-availability-slo.yaml
+  overridePaths: []
+- identifier: podsReady-podToPodTcp-throughputRecorded
+  configPath: testing/proto/proto-02-network-performance.yaml
+  overridePaths: []

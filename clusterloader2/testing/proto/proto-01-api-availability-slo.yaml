@@ -1,0 +1,47 @@
+# proto-01: API 가용성 SLO (단언 가능)
+#
+# 하는 일: 테스트 러너(clusterloader)가 일정 시간 동안 API 서버 /readyz를 주기적으로 호출하고,
+#          응답이 모두 OK인지 본다. (파드가 호출하는 것이 아님. clusterloader 프로세스가 kubeconfig로 호출.)
+#
+# SLI: /readyz 응답 가용률 (성공 횟수/총 요청)
+# SLO: threshold 미만이면 CL2가 gather 시 실패 반환 (단언)
+#
+# 실무적 필요성:
+#   - 배포·스케일링·kubectl 명령은 모두 API 서버를 경유한다. 가용률이 떨어지면
+#     롤링 업데이트 중단, HPA 반영 지연, 사용자 요청 5xx/타임아웃으로 이어진다.
+# 측정값에 따른 문제 가능성:
+#   - 가용률 < SLO(예: 0.99): API 서버 과부하, etcd 지연, 네트워크 분할, 단일 노드
+#     장애 등으로 인한 부분 장애. 즉시 원인 조사 및 롤백/스케일 아웃 검토 필요.
+#
+# GWT: Given 클러스터·네임스페이스 존재 → When /readyz 폴링 → Then gather 및 단언
+# 네이밍: 조건_대상_예상결과 → pollWindow_readyz_availabilityAbove99
+#   pollWindow = 폴링 구간(일정 시간 주기 호출), readyz = API 서버 /readyz, availabilityAbove99 = 가용률 99% 이상이어야 함
+name: pollWindow_readyz_availabilityAbove99
+namespace:
+  number: 1
+steps:
+# GWT When: (Given: cluster/ns ready) start /readyz polling; SLO threshold 0.99
+- name: Start API availability measurement
+  measurements:
+  - Identifier: ProtoAPIAvailability
+    Method: APIAvailability
+    Params:
+      action: start
+      pollFrequency: 5s
+      threshold: 0.99
+      useHostInternalIPs: false
+      useHostPublicIPs: false
+# GWT When: hold measurement window
+- name: Sleep 10s
+  measurements:
+  - Identifier: SleepBeforeGather
+    Method: Sleep
+    Params:
+      duration: "10s"
+# GWT Then: gather and assert availability >= SLO
+- name: Gather API availability
+  measurements:
+  - Identifier: ProtoAPIAvailability
+    Method: APIAvailability
+    Params:
+      action: gather

@@ -1,0 +1,55 @@
+# Chainsaw 래퍼: ol-proto 2번 시나리오(파드 간 TCP throughput) 실행 후
+# report JSON에서 throughput 값을 읽어 단언(threshold 이상)을 구현한다.
+#
+# 전제: clusterloader2/ 에서 실행하거나, 테스트 파일 기준 상위가 clusterloader2 이어야 함.
+# 필요: chainsaw, jq, clusterloader 바이너리
+#
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: ol-proto-02-throughput-assert
+spec:
+  steps:
+  # Step 1: CL2로 ol-proto 스위트 실행 (1번+2번 모두 실행), report-dir에 결과 저장
+  - try:
+    - script:
+        content: |
+          set -e
+          CL2_DIR="${CL2_DIR:-.}"
+          [ -d "$CL2_DIR" ] || { echo "CL2_DIR=$CL2_DIR not found"; exit 1; }
+          cd "$CL2_DIR"
+          [ -x ./clusterloader ] || { echo "clusterloader not found or not executable"; exit 1; }
+          rm -rf ./report
+          ./clusterloader --testsuite=ol-proto.yaml --provider=skeleton --report-dir=./report
+        env:
+        - name: CL2_DIR
+          value: ..
+        check:
+          ($error == null): true
+
+  # Step 2: report 디렉터리에서 NetworkPerformanceMetrics JSON을 찾아 throughput 단언
+  - try:
+    - script:
+        content: |
+          set -e
+          REPORT_DIR="${REPORT_DIR:-../report}"
+          [ -d "$REPORT_DIR" ] || { echo "REPORT_DIR=$REPORT_DIR not found"; exit 1; }
+          REPORT=$(ls -t "$REPORT_DIR"/*NetworkPerformance* 2>/dev/null | head -1)
+          [ -n "$REPORT" ] || { echo "No NetworkPerformanceMetrics report found"; exit 1; }
+          VAL=$(jq -r '[.dataItems[]? | select(.labels.Metric == "Throughput") | .data.Value] | first // empty' "$REPORT")
+          [ -n "$VAL" ] || { echo "Throughput value not found in report"; exit 1; }
+          # 단언: throughput >= MIN_THROUGHPUT (단위 kbytes/sec 등, 환경에 따라 조정)
+          MIN_THROUGHPUT="${MIN_THROUGHPUT:-1000000}"
+          if awk -v val="$VAL" -v min="$MIN_THROUGHPUT" 'BEGIN { if (val >= min) exit 0; else exit 1 }'; then
+            echo "OK throughput=$VAL >= $MIN_THROUGHPUT"
+          else
+            echo "FAIL throughput=$VAL < $MIN_THROUGHPUT"
+            exit 1
+          fi
+        env:
+        - name: REPORT_DIR
+          value: ../report
+        - name: MIN_THROUGHPUT
+          value: "1000000"
+        check:
+          ($error == null): true

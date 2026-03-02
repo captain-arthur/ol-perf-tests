@@ -1,0 +1,41 @@
+# proto-02: 네트워크 성능 측정 (단언 없음)
+#
+# 하는 일: 클라이언트 파드가 서버 파드로 TCP 트래픽을 보내고, 그 처리량(throughput)을 측정한다.
+#         (CL2가 netperf 네임스페이스에 server/client 워커 파드를 띄우고, client→server 트래픽 후 수치 수집.)
+#
+# SLI: 파드 간 TCP throughput (실제 측정값 수집)
+# SLO: 없음. CL2는 임계값 검증을 하지 않으며, 결과만 수집·리포트한다.
+#
+# 실무적 필요성:
+#   - 마이크로서비스·노드 간 트래픽이 많을 때, 네트워크 지연·대역폭 부족은 요청 지연,
+#     타임아웃, 재시도 폭증으로 이어진다. 배포 전/후 또는 CNI·정책 변경 시 기준선 수치가 필요하다.
+# 측정값에 따른 문제 가능성:
+#   - throughput 급감: CNI 성능 회귀, NetworkPolicy 과다, 노드/링크 포화, MTU·파편화 이슈.
+#   - latency 상승: 큐잉 지연, 동일 노드 경쟁, DNS/프록시 추가 홉. 수치를 보고 운영자가
+#     SLO(예: p99 < 10ms)를 별도로 판단·알람 연동해야 한다.
+#
+# GWT: Given 네임스페이스·테스트 환경 → When TCP 1:1 측정 구간 실행 → Then 결과 수집(단언 없음)
+# 네이밍: 조건_대상_예상결과 → podsReady_podToPodTcp_throughputRecorded
+#   podsReady = client/server 파드 기동됨, podToPodTcp = 파드→파드 TCP 트래픽, throughputRecorded = 처리량 수치 기록(단언 없음)
+name: podsReady_podToPodTcp_throughputRecorded
+namespace:
+  number: 1
+steps:
+# GWT When: (Given: test env) start TCP 1:1 measurement, duration 10s
+- name: Start network performance measurement
+  measurements:
+  - Identifier: ProtoNetworkPerf
+    Method: NetworkPerformanceMetrics
+    Params:
+      action: start
+      duration: "10s"
+      protocol: TCP
+      numberOfServers: 1
+      numberOfClients: 1
+# GWT Then: gather throughput/latency (no assertion)
+- name: Gather network performance
+  measurements:
+  - Identifier: ProtoNetworkPerf
+    Method: NetworkPerformanceMetrics
+    Params:
+      action: gather

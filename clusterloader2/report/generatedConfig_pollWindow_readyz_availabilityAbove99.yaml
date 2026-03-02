@@ -1,0 +1,52 @@
+name: pollWindow_readyz_availabilityAbove99
+dependencies: []
+automanagednamespaces: 0
+namespace:
+  number: 1
+  prefix: test-ymvdu1
+  deletestalenamespaces: false
+  deleteautomanagednamespaces: true
+  enableexistingnamespaces: false
+  deletenamespacetimeout: 600000000000
+steps:
+- phases: []
+  measurements:
+  - method: APIAvailability
+    params:
+      action: start
+      pollFrequency: 5s
+      threshold: 0.99
+      useHostInternalIPs: false
+      useHostPublicIPs: false
+    identifier: ProtoAPIAvailability
+    instances: []
+  module:
+    path: ""
+    params: {}
+  name: Start API availability measurement
+- phases: []
+  measurements:
+  - method: Sleep
+    params:
+      duration: 10s
+    identifier: SleepBeforeGather
+    instances: []
+  module:
+    path: ""
+    params: {}
+  name: Sleep 10s
+- phases: []
+  measurements:
+  - method: APIAvailability
+    params:
+      action: gather
+    identifier: ProtoAPIAvailability
+    instances: []
+  module:
+    path: ""
+    params: {}
+  name: Gather API availability
+tuningsets: []
+chaosmonkey:
+  nodefailure: null
+  excludednodes: {}
