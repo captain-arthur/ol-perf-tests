@@ -1,6 +1,6 @@
 module k8s.io/perf-tests/clusterloader2
 
-go 1.24.1
+go 1.25.0
 
 replace (
 	k8s.io/api => k8s.io/api v0.34.0
@@ -49,7 +49,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.47.0
 	golang.org/x/oauth2 v0.35.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 	golang.org/x/time v0.14.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.34.0
